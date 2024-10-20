@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"
+  integrity="sha512-DdX/YwF5e41Ok+AI81HI8f5/5UsoxCVT9GKYZRIzpLxb8Twz4ZwPPX+jQMwMhNQ9b5+zDEefc+dcvQoPWGNZ3g=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css" />
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/google-sans');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Product Sans', sans-serif;
+    }
+
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      background-image: linear-gradient(to bottom right, black, purple, black);
+      background-size: 500% 500%;
+      animation: change 7s ease-in-out infinite;
+    }
+
+    @keyframes change {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+      animation: slideLeft 2s ease;
+    }
+
+    .header img {
+      border: solid 2px #ff00ff;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      border: solid 1px purple;
+      box-shadow: 0 0 10px purple;
+      padding: 20px;
+      margin: 20px 0;
+      animation: slideIn 2s ease;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 15px;
+      animation: slideIn 0.5s ease;
+    }
+
+    hr {
+      border: 0;
+      border-top: solid 1px purple;
+      margin: 15px -20px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+    
+    a {
+    	text-decoration: none;
+        color: #FF61C6;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .button1 {
+      background-color: transparent;
+      color: white;
+      border: solid 1px rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .button1:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 10px purple;
+    }
+
+    #pageAdmins {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .divAdmin {
+      display: flex;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .divAdmin:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .divAdmin img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      animation: slideIn 1s ease-in-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideLeft {
+      from { transform: translateX(-10px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+  <link rel="icon" href="favicon.png">
+  <meta property="og:description" content="Bot is successfully running. Check details here">
+  <title>Kon Page Bot</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
+  <div class="header">
+    <img id="main" width="50" height="50" alt="Bot Avatar"/>
+    <div>
+      <h2>KonAI</h2>
+      <p>Facebook Bot</p>
+    </div>
+  </div>
+  <div class="container">
+    <h1>Browser Info</h1>
+    <hr />
+    <ul id="running">
+      <div id="runningInfo"></div>
+      <div id="runningDt"></div>
+    </ul>
+  </div>
+  <div class="container">
+    <h1>Bot Info</h1>
+    <hr/>
+    <ul id="botInfo"></ul>
+  </div>
+  <div class="container">
+    <h1>Developer Info</h1>
+    <hr />
+    <ul id="devInfo"></ul>
+    <h1 style="font-size: 12px; margin-top: 20px; letter-spacing: 0.8px;">BOT ADMIN</h1>
+    <div id="pageAdmins"></div>
+  </div>
+  <div class="button-container">
+    <button id="restartBot" class="button1">Restart Bot</button>
+    <button id="playMusic" class="button1">Play Music</button>
+  </div>
+  <footer>
+    <p>&copy; 2024 — KonAI Page Bot</p>
+  </footer>
+  <script>
+    let sound = null;
+const doc = id => document.getElementById(id);
+const graph = id => [`https://graph.facebook.com/${id}/picture?width=720&height=720&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`, id];
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  background: "purple",
+  timer: 3*1000,
+  confirmButtonColor: "#aa00ff",
+  showCancelButton: false,
+  timerProgressBar: true,
+  didOpen (toast){
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
+
+async function showResult(base, title, message, icon = "success", json = {}, result = () => {}) {
+  icon = icon.toLowerCase() || icon;
+  base.fire({
+    title,
+    icon,
+    html: message,
+    background: "purple",
+    showCancelButton: base !== Toast,
+    confirmButtonColor: "#aa00ff",
+    confirmButtonText: "Okay",
+    ...json
+  }).then(result);
+}
+
+function playMusic(url, isalang, isLoop) {
+  if (sound != null) {
+    sound.stop();
+    sound.unload();
+    sound = null;
+  }
+  sound = new Howl({
+    src: [url],
+    loop: isLoop,
+    format: ['mp3'],
+    volume: 1,
+    onend: () => {}
+  });
+  if (isalang){
+  sound.play();
+  }
+}
+
+function playShortAudio(url) {
+  const s = new Howl({
+    src: [url],
+    loop: false,
+    volume: 1,
+    autoplay: true
+  });
+  s.play();
+}
+const
+  botInfo = doc("botInfo"),
+  devInfo = doc("devInfo");
+async function add(classs, title, msg) {
+  const container = document.createElement('div');
+  const li = document.createElement('li');
+  li.className = 'list';
+  li.innerHTML = `${title}: ${msg}`;
+  container.appendChild(li);
+  classs.appendChild(container);
+}
+
+const pageImgs = doc("pageAdmins");
+async function addImg(imgSrc, devName) {
+  const container = document.createElement('div');
+  container.classList.add("divAdmin");
+  const img = document.createElement('img');
+  const name = document.createElement('label');
+  img.src = imgSrc[0];
+  img.width = 30;
+  img.height = 30;
+  name.style.fontSize = "9px";
+  name.style.marginLeft = "3px";
+  name.innerHTML = devName;
+  container.appendChild(img);
+  container.appendChild(name);
+  container.onclick = () => window.location.href = `https://www.facebook.com/profile.php?id=${imgSrc[1]}`
+  pageImgs.appendChild(container);
+}
+async function runningAdd() {
+  let txt = "";
+  txt += "<li class='list'>Browser CodeName: " + navigator.appCodeName + "</li>";
+  txt += "<li class='list'>Browser Name: " + navigator.appName + "</li>";
+  txt += "<li class='list'>Cookies Enabled: " + navigator.cookieEnabled + "</li>";
+  /*const ipData = await fetch("https://api.ipify.org/?format=json"),
+  ipJson = await ipData.json();
+  txt += "<li>IP Address: " + ipJson.ip + "</li>";*/
+  txt += "<li class='list'>Browser Language: " + navigator.language + "</li>";
+  txt += "<li class='list'>Browser Online: " + navigator.onLine + "</li>";
+  txt += "<li class='list'>Platform: " + navigator.platform + "</li>";
+  txt += "<li class='list'>User-agent: " + navigator.userAgent + "</li>";
+  const text_el = document.querySelector("div#runningInfo"),
+  text_dt = document.querySelector("div#runningDt"),
+  arrBulan = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  text_el.innerHTML = txt;
+  txt = null;
+  setInterval(() => {
+    const d = new Date(),
+    jam = d.getHours().toString().padStart(2, 0),
+    menit = d.getMinutes().toString().padStart(2, 0),
+    detik = d.getSeconds().toString().padStart(2, 0);
+    text_dt.innerHTML = "<li class='list'>Date: " + arrBulan[d.getMonth()] + " " + d.getDate() + " " + d.getFullYear() + "</li class='list'>" + "<li class='list'>Time: " + jam + ":" + menit + ":" + detik + "</li>";
+  }, 1 * 1000);
+}
+
+async function botAdd() {
+  const info = (await axios.get("/json")).data;
+  add(botInfo, "Bot Commands", info.commands.length);
+  add(botInfo, "Bot Prefix", info.prefix);
+  add(botInfo, "Server Uptime", info.uptime);
+  add(botInfo, "Server CPU", info.server.cpu[0].model);
+  add(botInfo, "Server Memory", info.server.memory);
+}
+
+async function music() {
+  let muswitch = false;
+  const file = "bgm",
+  nameFile = "blue.mp3",
+  mus = doc("playMusic"),
+  mustore = localStorage.getItem(file),
+  switchMusic = b => {
+    playMusic(nameFile, b, true);
+    mus.innerHTML = `${b ? "Stop" : "Play"} Music`;
+  }
+  mus.addEventListener("click", async () => {
+    muswitch = !muswitch;
+    switchMusic(muswitch);
+    localStorage.setItem(file, muswitch ? "1" : "0");
+    return;
+  });
+  muswitch = mustore === "1";
+  switchMusic(muswitch);
+}
+addEventListener("DOMContentLoaded", async (event) => {
+  doc("main").src = "favicon.png"
+  doc("restartBot").onclick = () =>
+  showResult(Swal, "Admin Access", "Please enter password to proceed.", "info", {
+    input: "password",
+    confirmButtonText: "Restart"
+  }, async (result) => {
+    try {
+    if (result.isConfirmed){
+    const restart = await axios.get("/restart", {
+      params: {
+        pass: result.value
+      }
+    });
+    if (!restart) throw new Error();
+    if (restart.data.error) throw new Error(restart.data.error);
+    showResult(Toast, "", restart.data.status);
+    }
+    } catch (error){
+      showResult(Toast, "", error.message || error, "error");
+    }
+  });
+  music();
+  runningAdd();
+  botAdd();
+  
+  // Add developer info here
+await add(devInfo, "Developer Name", "Zishin Ishikaze");
+await add(devInfo, "Contact", "zishin.dev@gmail.com");
+await add(devInfo, "Version", "1.2.5");
+await add(devInfo, "Description", "Kon is a friendly helpful assistant that can assist you in various text-based command prompts.");
+await add(devInfo, "Note", "This project is open-source and can be modified or redistributed as desired. Originally forked from <a href='https://github.com/neth7/Ws3-PageBot'>Ws3-PageBot Github</a>. Credits to the rightful owner of this project.");
+
+  // add your page admins here
+  await addImg(graph("100064714842032"), "Zishin Ishikaze");
+  setTimeout(() => window.scrollTo({top: 0, behavior: "smooth"}), 500);
+});
+  </script>
+</body>
+</html>

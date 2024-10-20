@@ -1,0 +1,27 @@
+{
+  "name": "KonPageBot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Zishin Ishikaze",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.0.6",
+    "axios": "^1.7.2",
+    "express": "^4.19.2",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^3.3.2",
+    "request": "^2.88.2",
+    "child_process": "^1.0.2",
+    "g4f": "^1.4.6",
+    "unlimited-ai": "2.0.2",
+    "1secmail-api": "1.1.1"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
