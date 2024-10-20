@@ -6,7 +6,7 @@ os = require('os'),
 fs = require('fs'),
 api = require('./ws3/api'),
 app = express(),
-VERIFY_TOKEN = 'ws3',
+VERIFY_TOKEN = 'konai',
 PASSWORD_ADMIN = process.env.pass || 'ws3',
 PAGE_ACCESS_TOKEN = api.PAGE_ACCESS_TOKEN,
 PORT = process.env.PORT || 3000
@@ -87,7 +87,7 @@ async function post() {
       content,
       author
     } = (await axios.get(`https://api.realinspire.tech/v1/quotes/random`)).data[0];
-    await api.publishPost(`${content}\n\n — ${author}
+    await api.publishPost(`${content}\n\n â€” ${author}
 `, PAGE_ACCESS_TOKEN);
     console.log("Triggered autopost.");
   }, {
